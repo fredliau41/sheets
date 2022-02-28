@@ -3,7 +3,7 @@ import time, os
 
 END_FILENAME = "Master_Copy(AIO).xlsx"
 TARGET_FILENAME = "target.xlsx"
-REGION_COLUMN_NAME = "Region"
+SHEET_COLUMN_NAME = "Sheet Name"
 
 
 def main():
@@ -19,12 +19,12 @@ def main():
             sheet = pd.read_excel(TARGET_FILENAME, sheet_name=my_sheet_name)
             total_rows = len(sheet.index)
             my_rows = [my_sheet_name] * total_rows
-            sheet.insert(3, REGION_COLUMN_NAME, my_rows, allow_duplicates=True)
+            sheet.insert(0, SHEET_COLUMN_NAME, my_rows, allow_duplicates=True)
 
             master_df.append(sheet)
 
         dataset_combined = pd.concat(master_df, axis=0)
-        columns_to_compare = dataset_combined.columns.drop(REGION_COLUMN_NAME)
+        columns_to_compare = dataset_combined.columns.drop(SHEET_COLUMN_NAME)
         dataset_combined.drop_duplicates(subset=columns_to_compare, keep="first", )
         dataset_combined.to_excel(END_FILENAME, sheet_name="Master sheet", index=False)
 
